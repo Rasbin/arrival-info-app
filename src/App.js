@@ -20,24 +20,24 @@ const ARRIVALS_QUERY = `
 `;
 
 const transportItem = (arrivals) => {
-  function alertClass(delay) {
+  const alertClass = (delay) => {
     if (delay) {
       return "alertColor alertColorDelayed";
     } else {
       return "alertColor alertColorOnTime";
     }
-  }
+  };
 
-  function secondsToHms(d) {
+  const secondsToHms = (d) => {
     d = Number(d);
     const h = Math.floor(d / 3600);
     let m = Math.floor((d % 3600) / 60);
     if (m < 10) m = "0" + m;
 
     return h + ":" + m;
-  }
+  };
 
-  function secondsToMinutes(d) {
+  const secondsToMinutes = (d) => {
     d = Number(d);
     const h = Math.floor(d / 3600);
     const m = Math.floor((d % 3600) / 60) + 1; // Adding 1 minute considering time in seconds
@@ -46,7 +46,7 @@ const transportItem = (arrivals) => {
     const mDisplay = m > 0 ? m + (m === 1 ? " minute " : " minutes / ") : "";
 
     return hDisplay + mDisplay;
-  }
+  };
 
   return arrivals.stoptimesWithoutPatterns.map((item) => {
     const currentDateTime = new Date();
@@ -98,7 +98,7 @@ const transportItem = (arrivals) => {
 
 let currentTime = new Date().getHours() + ":" + new Date().getMinutes();
 
-function App() {
+const App = () => {
   const [arrivals, setArrivals] = React.useState(null);
 
   useEffect(() => {
@@ -113,7 +113,7 @@ function App() {
       .then((response) => response.json())
       .then((data) => setArrivals(data.data.stop));
   }, []);
-  console.log("Arrivals: ", arrivals);
+
   return (
     <div className="App">
       <div className="navigation">
@@ -133,6 +133,6 @@ function App() {
       </div>
     </div>
   );
-}
+};
 
 export default App;
