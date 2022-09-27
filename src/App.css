@@ -2,37 +2,147 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+* {
+  box-sizing: border-box;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #D4D9DE;
+  font-family: "Helvetica", sans-serif;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.logo {
+  width: 125px;
+  height: 45px;;
+}
+
+.busArrivalTitle {
+  display: none;
+}
+
+.navigation {
+  margin: 50px;
+}
+
+.navigation span:nth-child(1) {
+  float: left;
+}
+
+.navigation .container span:nth-child(1) {
+  float: left;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.navigation span:nth-child(3) {
+  float: right;
+  font-size: 54px;
+  font-weight: 700;
+}
+
+.clearFix:after {
+  content:"";
+  display:block;
+  clear:both;
+ }
+
+.container {
+  width: 100%;
+  max-width: 670px;
+  margin: 0 auto 20px;
+}
+
+.container h1 {
+  margin: 20px 0px 40px;
+  float: left;
+}
+
+.transportItem {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 608px;
+  height: 64px;
+  padding: 1.25rem 1rem;
+  margin: 0.5rem 0;
+  background-color: #fff;
+  color: #000;
+  position: relative;
 }
 
-.App-link {
-  color: #61dafb;
+.transportItemTime {
+  margin: 0 2rem 0.5rem;
+  color: #909090;
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.transportItemName {
+  margin: 0 1rem 0.5rem;
+  color: #222222;
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.alertColor {
+  position:absolute;
+  left: 0px;
+  top: 8px;
+  bottom: 8px;
+  height: 48px;
+  width: 4px;
+  background-color: #00AD09;
+  border-radius: 0px 8px 8px 0px;
+}
+
+.alertColorOnTime {
+  background-color: #00AD09;;
+}
+
+.alertColorDelayed {
+  background-color: #FF0000;
+}
+
+/* MEDIA QUERIES */
+@media only screen and (max-width: 576px) {
+  .container{
+    max-width: 350px;
+    margin: 0 auto;
   }
-  to {
-    transform: rotate(360deg);
+
+  .navigation{
+    max-width: 350px;
+    margin: 1rem auto;
+  }
+
+  #currentTime {
+    font-family: 'IBM Plex Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  #pageTitle {
+    display: none;
+  }
+
+  .busArrivalTitle {
+    display: block;
+    text-align: left;
+    font-family: 'IBM Plex Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    margin-top: 30px;
   }
 }
