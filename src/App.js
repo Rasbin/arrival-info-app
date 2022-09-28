@@ -82,7 +82,7 @@ const transportItem = (arrivals) => {
         <div>
           <img src={busIcon} alt="bus" width="22px" height="17px" />
           {arrivals.routes.map((publicTransportNumber) => (
-            <span className="transportItemName">
+            <span className="transportItemName" key={publicTransportNumber.id}>
               {publicTransportNumber.shortName}
               {delay && delayText}
             </span>
