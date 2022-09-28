@@ -3,22 +3,7 @@ import "./App.css";
 import VirtaLogo from "./images/VirtaLogo";
 import TransportItem from "./components/TransportItem";
 import { currentTime } from "./utils/timeConverter";
-
-const ARRIVALS_QUERY = `
-{
-  stop(id: "HSL:1201110") {
-  	name
-    routes {
-      id
-      shortName
-    }
-    stoptimesWithoutPatterns {
-      arrivalDelay
-      realtimeArrival
-    }
-  }
-}
-`;
+import { arrivalQuery as ARRIVALS_QUERY } from "./api/arrivalsQuery";
 
 const App = () => {
   const [arrivals, setArrivals] = React.useState(null);
