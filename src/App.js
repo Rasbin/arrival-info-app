@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import "./App.css";
-import VirtaLogo from "./images/VirtaLogo";
-import TransportItem from "./components/TransportItem";
-import { currentTime } from "./utils/timeConverter";
+import Navigation from "./components/Navigation";
+import Dashboard from "./components/Dashboard";
 import { arrivalQuery as ARRIVALS_QUERY } from "./api/arrivalsQuery";
 
 const App = () => {
@@ -23,21 +22,8 @@ const App = () => {
 
   return (
     <div className="App">
-      <div className="navigation">
-        <span className="logo">
-          <VirtaLogo />
-        </span>
-        <div className="container">
-          <span id="pageTitle">Buses arriving to</span>
-        </div>
-        <span id="currentTime">{currentTime()}</span>
-      </div>
-      <div className="clearFix"></div>
-      <div className="container">
-        <span className="busArrivalTitle">Buses arriving to</span>
-        <h1>{arrivals != null && arrivals.name}</h1>
-        {arrivals != null && <TransportItem arrivals={arrivals} />}
-      </div>
+      <Navigation />
+      <Dashboard arrivals={arrivals} />
     </div>
   );
 };
