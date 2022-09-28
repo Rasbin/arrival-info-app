@@ -77,7 +77,7 @@ const transportItem = (arrivals) => {
     const delayText = " (" + delayInMin + " minutes late)";
 
     return (
-      <div className="transportItem flexContainer">
+      <div className="transportItem flexContainer" key={item.realtimeArrival}>
         <span className={alertClass(delay)}></span>
         <div>
           <img src={busIcon} alt="bus" width="22px" height="17px" />
