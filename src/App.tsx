@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import * as React from "react";
+import { useEffect } from "react";
 import "./App.css";
 import Navigation from "./components/Navigation";
 import Dashboard from "./components/Dashboard";
@@ -23,7 +24,7 @@ const App = () => {
   return (
     <div className="App">
       <Navigation />
-      <Dashboard arrivals={arrivals} />
+      {arrivals != null && <Dashboard arrivals={arrivals} />}
     </div>
   );
 };

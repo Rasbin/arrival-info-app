@@ -1,10 +1,31 @@
 import React from "react";
+// @ts-expect-error
 import busIcon from "../images/bus.png";
 import { secondsToHms, secondsToMinutes } from "../utils/timeConverter";
 
-const Dashboard = ({ arrivals }) => {
+interface Route {
+  id: string;
+  shortName: string;
+}
+
+interface StopTimesWithoutPattern {
+  arrivalDelay: number;
+  realtimeArrival: number;
+}
+
+interface Arrival {
+  name: string;
+  routes: Route[];
+  stoptimesWithoutPatterns: StopTimesWithoutPattern[];
+}
+
+interface DashboardProps {
+  arrivals: Arrival
+}
+
+const Dashboard:React.FC<DashboardProps> = ({arrivals}) => {
   const transportItem = () => {
-    const alertClass = (delay) => {
+    const alertClass = (delay: boolean) => {
       if (delay) {
         return "alertColor alertColorDelayed";
       } else {
@@ -17,6 +38,7 @@ const Dashboard = ({ arrivals }) => {
       const currentHourIn24Hr = currentDateTime
         .getHours()
         .toLocaleString("en-US", {
+          // @ts-expect-error
           hour12: false,
         });
 
@@ -24,7 +46,7 @@ const Dashboard = ({ arrivals }) => {
       const currentSeconds = currentDateTime.getSeconds();
 
       const currentTimeInSec =
-        currentHourIn24Hr * 60 * 60 + currentMinutes * 60 + currentSeconds;
+        Number(currentHourIn24Hr) * 60 * 60 + currentMinutes * 60 + currentSeconds;
 
       const realtimeArrivalinSec = item.realtimeArrival;
       const waitingTimeInSec =
@@ -66,6 +88,7 @@ const Dashboard = ({ arrivals }) => {
   return (
     <div className="container">
       <h1>{arrivals != null && arrivals.name}</h1>
+      {/* @ts-expect-error */}
       {arrivals != null && transportItem(arrivals)}
     </div>
   );

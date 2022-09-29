@@ -1,13 +1,16 @@
-export const secondsToHms = (d) => {
+export const secondsToHms = (d: number) => {
   d = Number(d);
   const h = Math.floor(d / 3600);
   let m = Math.floor((d % 3600) / 60);
-  if (m < 10) m = "0" + m;
+  let formattedm = m.toString();
+  if (m < 10) {
+    formattedm = "0" + m;
+  }
 
-  return h + ":" + m;
+  return h + ":" + formattedm;
 };
 
-export const secondsToMinutes = (d) => {
+export const secondsToMinutes = (d: number) => {
   d = Number(d);
   const h = Math.floor(d / 3600);
   const m = Math.floor((d % 3600) / 60) + 1; // Adding 1 minute considering time in seconds
@@ -19,9 +22,12 @@ export const secondsToMinutes = (d) => {
 };
 
 export const currentTime = () => {
-  let formattedTime = new Date().getMinutes();
-  if (formattedTime < 10) {
-    formattedTime = "0" + formattedTime;
+  let unformattedTime = new Date().getMinutes();
+  let formattedTime = "";
+  if (unformattedTime < 10) {
+    formattedTime = "0" + unformattedTime;
+  } else {
+    formattedTime = unformattedTime.toString();
   }
   return new Date().getHours() + ":" + formattedTime;
 };
