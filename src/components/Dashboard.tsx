@@ -1,5 +1,4 @@
 import React from "react";
-// @ts-expect-error
 import busIcon from "../images/bus.png";
 import { secondsToHms, secondsToMinutes } from "../utils/timeConverter";
 
@@ -20,76 +19,79 @@ interface Arrival {
 }
 
 interface DashboardProps {
-  arrivals: Arrival
+  arrivals: Arrival;
 }
 
-const Dashboard:React.FC<DashboardProps> = ({arrivals}) => {
-  const transportItem = () => {
-    const alertClass = (delay: boolean) => {
-      if (delay) {
-        return "alertColor alertColorDelayed";
-      } else {
-        return "alertColor alertColorOnTime";
-      }
-    };
+/**
+ * Calculate the current time in seconds since midnight
+ */
+const getCurrentTimeInSeconds = (): number => {
+  const now = new Date();
+  const hours = now.getHours();
+  const minutes = now.getMinutes();
+  const seconds = now.getSeconds();
+  return hours * 3600 + minutes * 60 + seconds;
+};
 
-    return arrivals.stoptimesWithoutPatterns.map((item) => {
-      const currentDateTime = new Date();
-      const currentHourIn24Hr = currentDateTime
-        .getHours()
-        .toLocaleString("en-US", {
-          // @ts-expect-error
-          hour12: false,
-        });
+/**
+ * Calculate waiting time until arrival
+ */
+const calculateWaitingTime = (
+  realtimeArrival: number,
+  currentTime: number,
+): number => {
+  if (realtimeArrival > currentTime) {
+    return realtimeArrival - currentTime;
+  }
+  // Next day calculation
+  return 86400 - currentTime + realtimeArrival;
+};
 
-      const currentMinutes = currentDateTime.getMinutes();
-      const currentSeconds = currentDateTime.getSeconds();
+const getAlertClass = (isDelayed: boolean): string => {
+  return isDelayed
+    ? "alertColor alertColorDelayed"
+    : "alertColor alertColorOnTime";
+};
 
-      const currentTimeInSec =
-        Number(currentHourIn24Hr) * 60 * 60 + currentMinutes * 60 + currentSeconds;
+const Dashboard: React.FC<DashboardProps> = ({ arrivals }) => {
+  const currentTimeInSec = getCurrentTimeInSeconds();
 
-      const realtimeArrivalinSec = item.realtimeArrival;
-      const waitingTimeInSec =
-        realtimeArrivalinSec > currentTimeInSec
-          ? realtimeArrivalinSec - currentTimeInSec
-          : 86400 - currentTimeInSec + realtimeArrivalinSec;
-      const waitingTimeInMin = secondsToMinutes(waitingTimeInSec);
-      const waitingTimeText = "In " + waitingTimeInMin;
-      const timeInHrAndMin = secondsToHms(realtimeArrivalinSec);
-      const delay = item.arrivalDelay > 0 ? true : false;
-      const delayInSec = item.arrivalDelay;
-      const delayInMin = secondsToMinutes(delayInSec);
+  const transportItems = arrivals.stoptimesWithoutPatterns.map((item) => {
+    const waitingTimeInSec = calculateWaitingTime(
+      item.realtimeArrival,
+      currentTimeInSec,
+    );
+    const waitingTimeInMin = secondsToMinutes(waitingTimeInSec);
+    const waitingTimeText = "In " + waitingTimeInMin;
+    const timeInHrAndMin = secondsToHms(item.realtimeArrival);
+    const isDelayed = item.arrivalDelay > 0;
+    const delayInMin = secondsToMinutes(item.arrivalDelay);
+    const delayText = isDelayed ? ` (${delayInMin}minutes late)` : "";
 
-      const delayText = " (" + delayInMin + " minutes late)";
-
-      return (
-        <div className="transportItem flexContainer" key={item.realtimeArrival}>
-          <span className={alertClass(delay)}></span>
-          <div>
-            <img src={busIcon} alt="bus" width="22px" height="17px" />
-            {arrivals.routes.map((publicTransportNumber) => (
-              <span
-                className="transportItemName"
-                key={publicTransportNumber.id}
-              >
-                {publicTransportNumber.shortName}
-                {delay && delayText}
-              </span>
-            ))}
-          </div>
-          <span className="transportItemTime">
-            {waitingTimeText + timeInHrAndMin}
-          </span>
+    return (
+      <div className="transportItem flexContainer" key={item.realtimeArrival}>
+        <span className={getAlertClass(isDelayed)}></span>
+        <div>
+          <img src={busIcon} alt="bus" width="22px" height="17px" />
+          {arrivals.routes.map((publicTransportNumber) => (
+            <span className="transportItemName" key={publicTransportNumber.id}>
+              {publicTransportNumber.shortName}
+              {delayText}
+            </span>
+          ))}
         </div>
-      );
-    });
-  };
+        <span className="transportItemTime">
+          {waitingTimeText}
+          {timeInHrAndMin}
+        </span>
+      </div>
+    );
+  });
 
   return (
     <div className="container">
-      <h1>{arrivals != null && arrivals.name}</h1>
-      {/* @ts-expect-error */}
-      {arrivals != null && transportItem(arrivals)}
+      <h1>{arrivals.name}</h1>
+      {transportItems}
     </div>
   );
 };

@@ -1,33 +1,39 @@
-export const secondsToHms = (d: number) => {
-  d = Number(d);
-  const h = Math.floor(d / 3600);
-  let m = Math.floor((d % 3600) / 60);
-  let formattedm = m.toString();
-  if (m < 10) {
-    formattedm = "0" + m;
-  }
+/**
+ * Convert seconds to HH:MM format
+ */
+export const secondsToHms = (seconds: number): string => {
+  const numSeconds = Number(seconds);
+  const hours = Math.floor(numSeconds / 3600);
+  const minutes = Math.floor((numSeconds % 3600) / 60);
+  const formattedMinutes = minutes < 10 ? `0${minutes}` : String(minutes);
 
-  return h + ":" + formattedm;
+  return `${hours}:${formattedMinutes}`;
 };
 
-export const secondsToMinutes = (d: number) => {
-  d = Number(d);
-  const h = Math.floor(d / 3600);
-  const m = Math.floor((d % 3600) / 60) + 1; // Adding 1 minute considering time in seconds
+/**
+ * Convert seconds to human-readable time format (e.g., "2 hours 5 minutes")
+ */
+export const secondsToMinutes = (seconds: number): string => {
+  const numSeconds = Number(seconds);
+  const hours = Math.floor(numSeconds / 3600);
+  const minutes = Math.floor((numSeconds % 3600) / 60) + 1; // Adding 1 minute considering time in seconds
 
-  const hDisplay = h > 0 ? h + (h === 1 ? " hour " : " hours ") : "";
-  const mDisplay = m > 0 ? m + (m === 1 ? " minute " : " minutes / ") : "";
+  const hoursDisplay =
+    hours > 0 ? `${hours}${hours === 1 ? " hour " : " hours "}` : "";
+  const minutesDisplay =
+    minutes > 0 ? `${minutes}${minutes === 1 ? " minute " : " minutes"}` : "";
 
-  return hDisplay + mDisplay;
+  return `${hoursDisplay}${minutesDisplay}`;
 };
 
-export const currentTime = () => {
-  let unformattedTime = new Date().getMinutes();
-  let formattedTime = "";
-  if (unformattedTime < 10) {
-    formattedTime = "0" + unformattedTime;
-  } else {
-    formattedTime = unformattedTime.toString();
-  }
-  return new Date().getHours() + ":" + formattedTime;
+/**
+ * Get current time in HH:MM format
+ */
+export const currentTime = (): string => {
+  const now = new Date();
+  const hours = now.getHours();
+  const minutes = now.getMinutes();
+  const formattedMinutes = minutes < 10 ? `0${minutes}` : String(minutes);
+
+  return `${hours}:${formattedMinutes}`;
 };

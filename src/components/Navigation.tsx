@@ -2,7 +2,7 @@ import React from "react";
 import VirtaLogo from "../images/VirtaLogo";
 import { currentTime } from "../utils/timeConverter";
 
-const Navigation = () => {
+const Navigation: React.FC = () => {
   return (
     <div data-testid="nav-test">
       <div className="navigation">
@@ -12,7 +12,9 @@ const Navigation = () => {
         <div className="container">
           <span id="pageTitle">Buses arriving to</span>
         </div>
-        <span id="currentTime" data-testid="current-time-test">{currentTime()}</span>
+        <span id="currentTime" data-testid="current-time-test">
+          {currentTime()}
+        </span>
       </div>
       <div className="clearFix"></div>
       <div className="container">
