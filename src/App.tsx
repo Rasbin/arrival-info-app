@@ -15,16 +15,13 @@ const App = () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch(
-          "https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql/",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ query: ARRIVALS_QUERY }),
+        const response = await fetch("http://localhost:5000/api/arrivals", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-        );
+          body: JSON.stringify({ query: ARRIVALS_QUERY }),
+        });
 
         if (!response.ok) {
           throw new Error(`API error: ${response.status}`);
