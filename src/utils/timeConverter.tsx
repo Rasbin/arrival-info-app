@@ -1,39 +1,60 @@
-/**
- * Convert seconds to HH:MM format
- */
-export const secondsToHms = (seconds: number): string => {
-  const numSeconds = Number(seconds);
-  const hours = Math.floor(numSeconds / 3600);
-  const minutes = Math.floor((numSeconds % 3600) / 60);
-  const formattedMinutes = minutes < 10 ? `0${minutes}` : String(minutes);
+export const secondsToHms = (d: number) => {
+  d = Number(d);
+  const h = Math.floor(d / 3600);
+  let m = Math.floor((d % 3600) / 60);
+  let formattedm = m.toString();
+  if (m < 10) {
+    formattedm = "0" + m;
+  }
 
-  return `${hours}:${formattedMinutes}`;
+  return h + ":" + formattedm;
+};
+
+export const secondsToMinutes = (d: number) => {
+  d = Number(d);
+  const h = Math.floor(d / 3600);
+  const m = Math.floor((d % 3600) / 60) + 1; // Adding 1 minute considering time in seconds
+
+  const hDisplay = h > 0 ? h + (h === 1 ? " hour " : " hours ") : "";
+  const mDisplay = m > 0 ? m + (m === 1 ? " minute " : " minutes / ") : "";
+
+  return hDisplay + mDisplay;
+};
+
+export const currentTime = () => {
+  let unformattedTime = new Date().getMinutes();
+  let formattedTime = "";
+  if (unformattedTime < 10) {
+    formattedTime = "0" + unformattedTime;
+  } else {
+    formattedTime = unformattedTime.toString();
+  }
+  return new Date().getHours() + ":" + formattedTime;
 };
 
 /**
- * Convert seconds to human-readable time format (e.g., "2 hours 5 minutes")
+ * Calculate seconds since midnight for the current time
  */
-export const secondsToMinutes = (seconds: number): string => {
-  const numSeconds = Number(seconds);
-  const hours = Math.floor(numSeconds / 3600);
-  const minutes = Math.floor((numSeconds % 3600) / 60) + 1; // Adding 1 minute considering time in seconds
-
-  const hoursDisplay =
-    hours > 0 ? `${hours}${hours === 1 ? " hour " : " hours "}` : "";
-  const minutesDisplay =
-    minutes > 0 ? `${minutes}${minutes === 1 ? " minute " : " minutes"}` : "";
-
-  return `${hoursDisplay}${minutesDisplay}`;
-};
-
-/**
- * Get current time in HH:MM format
- */
-export const currentTime = (): string => {
+export const getCurrentTimeInSeconds = (): number => {
   const now = new Date();
   const hours = now.getHours();
   const minutes = now.getMinutes();
-  const formattedMinutes = minutes < 10 ? `0${minutes}` : String(minutes);
+  const seconds = now.getSeconds();
 
-  return `${hours}:${formattedMinutes}`;
+  return hours * 3600 + minutes * 60 + seconds;
+};
+
+/**
+ * Calculate waiting time in seconds between now and arrival time
+ * @param realtimeArrivalInSec - Arrival time in seconds since midnight
+ * @returns Waiting time in seconds
+ */
+export const calculateWaitingTimeInSeconds = (
+  realtimeArrivalInSec: number,
+): number => {
+  const currentTimeInSec = getCurrentTimeInSeconds();
+
+  return realtimeArrivalInSec > currentTimeInSec
+    ? realtimeArrivalInSec - currentTimeInSec
+    : 86400 - currentTimeInSec + realtimeArrivalInSec;
 };

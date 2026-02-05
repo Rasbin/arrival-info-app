@@ -1,6 +1,4 @@
-import React from "react";
-
-const VirtaLogo: React.FC = () => {
+const virtaLogo = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -31,4 +29,4 @@ const VirtaLogo: React.FC = () => {
   );
 };
 
-export default VirtaLogo;
+export default virtaLogo;

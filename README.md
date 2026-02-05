@@ -1,53 +1,105 @@
-# Getting Started with Create React App
+# Arrival Info App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A real-time public transportation arrival information display built with React and TypeScript. This application fetches bus arrival data from the HSL (Helsinki Regional Transport) Digitransit API and displays upcoming bus arrivals with delay information.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- Real-time bus arrival information
+- Live clock showing current time
+- Delay indicators (green for on-time, red for delayed)
+- Waiting time calculation
+- Responsive design for mobile and desktop
+- Error handling with user-friendly messages
+- Loading state feedback
 
-### `npm start`
+## Project Structure
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```
+src/
+├── api/
+│   └── arrivalsQuery.tsx      # GraphQL query for HSL Digitransit API
+├── components/
+│   ├── Dashboard.tsx           # Main content displaying bus arrivals
+│   ├── Navigation.tsx          # Header with logo and current time
+│   └── __tests__/
+│       └── App.test.tsx        # Component tests
+├── images/
+│   ├── bus.png                 # Bus icon
+│   └── VirtaLogo.tsx          # Company logo component
+├── utils/
+│   └── timeConverter.tsx       # Time calculation utilities
+├── App.tsx                     # Main application component
+├── App.css                     # Application styles
+└── index.tsx                   # React entry point
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Getting Started
 
-### `npm test`
+### Prerequisites
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Node.js 16+
+- npm or yarn
 
-### `npm run build`
+### Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+npm install
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Running the Application
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+npm start
+```
 
-### `npm run eject`
+Runs the app in development mode. Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Building for Production
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm run build
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Builds the app for production to the `build` folder.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Running Tests
 
-## Learn More
+```bash
+npm test
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Launches the test runner in interactive watch mode.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## API Integration
 
-### Code Splitting
+This app uses the HSL Digitransit API to fetch real-time bus arrival data. The GraphQL query fetches:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- Stop name
+- Route information (ID and short name)
+- Arrival times (in seconds since midnight)
+- Arrival delays
+
+For more information about the API, visit [Digitransit API Documentation](https://digitransit.fi/en/developers/apis/1-routing-api/)
+
+## Recent Improvements
+
+- ✅ Added proper error handling and loading states
+- ✅ Removed TypeScript @ts-expect-error suppressions
+- ✅ Refactored time calculations into reusable utilities
+- ✅ Real-time clock updates in Navigation
+- ✅ Improved code organization and maintainability
+- ✅ Removed unused dependencies
+
+## Known Issues & Future Work
+
+See [TODO.md](./TODO.md) for additional improvements planned.
+
+## Technologies Used
+
+- React 18.2.0
+- TypeScript 4.8.4
+- React Testing Library
+- CSS3
 
 ### Analyzing the Bundle Size
 

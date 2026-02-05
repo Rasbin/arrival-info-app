@@ -1,8 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import VirtaLogo from "../images/VirtaLogo";
 import { currentTime } from "../utils/timeConverter";
 
-const Navigation: React.FC = () => {
+const Navigation = () => {
+  const [time, setTime] = useState(currentTime());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTime(currentTime());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div data-testid="nav-test">
       <div className="navigation">
@@ -13,7 +23,7 @@ const Navigation: React.FC = () => {
           <span id="pageTitle">Buses arriving to</span>
         </div>
         <span id="currentTime" data-testid="current-time-test">
-          {currentTime()}
+          {time}
         </span>
       </div>
       <div className="clearFix"></div>

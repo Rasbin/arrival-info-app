@@ -1,6 +1,10 @@
 import React from "react";
 import busIcon from "../images/bus.png";
-import { secondsToHms, secondsToMinutes } from "../utils/timeConverter";
+import {
+  secondsToHms,
+  secondsToMinutes,
+  calculateWaitingTimeInSeconds,
+} from "../utils/timeConverter";
 
 interface Route {
   id: string;
@@ -22,76 +26,55 @@ interface DashboardProps {
   arrivals: Arrival;
 }
 
-/**
- * Calculate the current time in seconds since midnight
- */
-const getCurrentTimeInSeconds = (): number => {
-  const now = new Date();
-  const hours = now.getHours();
-  const minutes = now.getMinutes();
-  const seconds = now.getSeconds();
-  return hours * 3600 + minutes * 60 + seconds;
-};
-
-/**
- * Calculate waiting time until arrival
- */
-const calculateWaitingTime = (
-  realtimeArrival: number,
-  currentTime: number,
-): number => {
-  if (realtimeArrival > currentTime) {
-    return realtimeArrival - currentTime;
-  }
-  // Next day calculation
-  return 86400 - currentTime + realtimeArrival;
-};
-
-const getAlertClass = (isDelayed: boolean): string => {
-  return isDelayed
-    ? "alertColor alertColorDelayed"
-    : "alertColor alertColorOnTime";
-};
-
 const Dashboard: React.FC<DashboardProps> = ({ arrivals }) => {
-  const currentTimeInSec = getCurrentTimeInSeconds();
+  const transportItem = () => {
+    const alertClass = (delay: boolean) => {
+      if (delay) {
+        return "alertColor alertColorDelayed";
+      } else {
+        return "alertColor alertColorOnTime";
+      }
+    };
 
-  const transportItems = arrivals.stoptimesWithoutPatterns.map((item) => {
-    const waitingTimeInSec = calculateWaitingTime(
-      item.realtimeArrival,
-      currentTimeInSec,
-    );
-    const waitingTimeInMin = secondsToMinutes(waitingTimeInSec);
-    const waitingTimeText = "In " + waitingTimeInMin;
-    const timeInHrAndMin = secondsToHms(item.realtimeArrival);
-    const isDelayed = item.arrivalDelay > 0;
-    const delayInMin = secondsToMinutes(item.arrivalDelay);
-    const delayText = isDelayed ? ` (${delayInMin}minutes late)` : "";
+    return arrivals.stoptimesWithoutPatterns.map((item) => {
+      const waitingTimeInSec = calculateWaitingTimeInSeconds(
+        item.realtimeArrival,
+      );
+      const waitingTimeInMin = secondsToMinutes(waitingTimeInSec);
+      const waitingTimeText = "In " + waitingTimeInMin;
+      const timeInHrAndMin = secondsToHms(item.realtimeArrival);
+      const delay = item.arrivalDelay > 0 ? true : false;
+      const delayInMin = secondsToMinutes(item.arrivalDelay);
 
-    return (
-      <div className="transportItem flexContainer" key={item.realtimeArrival}>
-        <span className={getAlertClass(isDelayed)}></span>
-        <div>
-          <img src={busIcon} alt="bus" width="22px" height="17px" />
-          {arrivals.routes.map((publicTransportNumber) => (
-            <span className="transportItemName" key={publicTransportNumber.id}>
-              {publicTransportNumber.shortName}
-              {delayText}
-            </span>
-          ))}
+      const delayText = " (" + delayInMin + " minutes late)";
+
+      return (
+        <div className="transportItem flexContainer" key={item.realtimeArrival}>
+          <span className={alertClass(delay)}></span>
+          <div>
+            <img src={busIcon} alt="bus" width="22px" height="17px" />
+            {arrivals.routes.map((publicTransportNumber) => (
+              <span
+                className="transportItemName"
+                key={publicTransportNumber.id}
+              >
+                {publicTransportNumber.shortName}
+                {delay && delayText}
+              </span>
+            ))}
+          </div>
+          <span className="transportItemTime">
+            {waitingTimeText + timeInHrAndMin}
+          </span>
         </div>
-        <span className="transportItemTime">
-          {waitingTimeText}
-          {timeInHrAndMin}
-        </span>
-      </div>
-    );
-  });
+      );
+    });
+  };
 
   return (
     <div className="container">
-      <h1>{arrivals.name}</h1>
-      {transportItems}
+      <h1>{arrivals != null && arrivals.name}</h1>
+      {arrivals != null && transportItem()}
     </div>
   );
 };
