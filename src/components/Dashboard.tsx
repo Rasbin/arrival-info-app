@@ -29,43 +29,41 @@ interface DashboardProps {
 const Dashboard: React.FC<DashboardProps> = ({ arrivals }) => {
   const transportItem = () => {
     const alertClass = (delay: boolean) => {
-      if (delay) {
-        return "alertColor alertColorDelayed";
-      } else {
-        return "alertColor alertColorOnTime";
-      }
+      return delay
+        ? "alertColor alertColorDelayed"
+        : "alertColor alertColorOnTime";
     };
 
-    return arrivals.stoptimesWithoutPatterns.map((item) => {
+    return arrivals.stoptimesWithoutPatterns.map((item, index) => {
       const waitingTimeInSec = calculateWaitingTimeInSeconds(
         item.realtimeArrival,
       );
       const waitingTimeInMin = secondsToMinutes(waitingTimeInSec);
-      const waitingTimeText = "In " + waitingTimeInMin;
       const timeInHrAndMin = secondsToHms(item.realtimeArrival);
-      const delay = item.arrivalDelay > 0 ? true : false;
-      const delayInMin = secondsToMinutes(item.arrivalDelay);
+      const delay = item.arrivalDelay > 0;
+      const delayInMin = delay ? secondsToMinutes(item.arrivalDelay) : "";
 
-      const delayText = " (" + delayInMin + " minutes late)";
+      // Get the first route (bus number) for this arrival
+      const busNumber = arrivals.routes[0]?.shortName || "-";
 
       return (
-        <div className="transportItem flexContainer" key={item.realtimeArrival}>
+        <div className="transportItem" key={index}>
           <span className={alertClass(delay)}></span>
-          <div>
-            <img src={busIcon} alt="bus" width="22px" height="17px" />
-            {arrivals.routes.map((publicTransportNumber) => (
-              <span
-                className="transportItemName"
-                key={publicTransportNumber.id}
-              >
-                {publicTransportNumber.shortName}
-                {delay && delayText}
-              </span>
-            ))}
+          <div className="transportItemContent">
+            <div className="transportItemLeft">
+              <img src={busIcon} alt="bus" width="22px" height="17px" />
+              <span className="transportItemNumber">{busNumber}</span>
+            </div>
+            <div className="transportItemMiddle">
+              {delay && (
+                <span className="transportItemDelay">{delayInMin}</span>
+              )}
+              {!delay && <span className="transportItemOnTime">On time</span>}
+            </div>
+            <div className="transportItemRight">
+              <span className="transportItemTime">{timeInHrAndMin}</span>
+            </div>
           </div>
-          <span className="transportItemTime">
-            {waitingTimeText + timeInHrAndMin}
-          </span>
         </div>
       );
     });

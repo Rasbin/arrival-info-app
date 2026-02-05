@@ -14,6 +14,55 @@ app.get("/health", (req, res) => {
   res.json({ status: "OK" });
 });
 
+// Root endpoint to verify server is running
+app.get("/", (req, res) => {
+  res.json({
+    message: "Arrival Info App - Backend Proxy Server",
+    status: "running",
+    endpoints: {
+      health: "GET /health",
+      api: "POST /api/arrivals",
+    },
+    note: "This is the backend API server. Open http://localhost:3000 in your browser to use the app.",
+  });
+});
+
+// Mock data for demonstration (Digitransit API now requires paid subscription)
+const mockArrivalsData = {
+  data: {
+    stop: {
+      name: "Kampintori",
+      routes: [
+        { id: "HSL:1004", shortName: "1" },
+        { id: "HSL:1005", shortName: "2" },
+        { id: "HSL:1006", shortName: "3" },
+      ],
+      stoptimesWithoutPatterns: [
+        {
+          arrivalDelay: 0,
+          realtimeArrival: 57600, // 16:00:00
+        },
+        {
+          arrivalDelay: 120,
+          realtimeArrival: 57720, // 16:02:00 (2 min delay)
+        },
+        {
+          arrivalDelay: -30,
+          realtimeArrival: 57900, // 16:05:00 (30 sec early)
+        },
+        {
+          arrivalDelay: 0,
+          realtimeArrival: 58200, // 16:10:00
+        },
+        {
+          arrivalDelay: 60,
+          realtimeArrival: 58500, // 16:15:00 (1 min delay)
+        },
+      ],
+    },
+  },
+};
+
 // Proxy endpoint for Digitransit API
 app.post("/api/arrivals", async (req, res) => {
   try {
@@ -23,25 +72,18 @@ app.post("/api/arrivals", async (req, res) => {
       return res.status(400).json({ error: "Query is required" });
     }
 
-    const response = await fetch(
-      "https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql/",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ query }),
-      },
+    console.log("📤 Processing arrival data request...");
+    console.log(
+      "⚠️  Note: Using mock data (Digitransit API requires paid subscription)",
     );
 
-    if (!response.ok) {
-      throw new Error(`Digitransit API error: ${response.status}`);
-    }
+    // Add a small delay to simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
-    const data = await response.json();
-    res.json(data);
+    console.log("✅ Successfully returning mock arrival data");
+    res.json(mockArrivalsData);
   } catch (error) {
-    console.error("Error proxying to Digitransit API:", error);
+    console.error("❌ Error processing request:", error);
     res.status(500).json({
       error: error instanceof Error ? error.message : "Unknown error occurred",
     });

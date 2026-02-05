@@ -61,40 +61,78 @@ body {
 
 .transportItem {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
   width: 100%;
   max-width: 608px;
-  height: 64px;
-  padding: 1.25rem 1rem;
+  height: auto;
+  min-height: 64px;
+  padding: 1rem;
   margin: 0.5rem 0;
   background-color: #fff;
   color: #000;
   position: relative;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.transportItemContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-left: 0.5rem;
+  gap: 1rem;
+}
+
+.transportItemLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 60px;
+}
+
+.transportItemNumber {
+  font-family: "IBM Plex Sans";
+  font-size: 20px;
+  font-weight: 700;
+  color: #222222;
+  min-width: 30px;
+}
+
+.transportItemMiddle {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.transportItemDelay {
+  font-family: "IBM Plex Sans";
+  font-size: 14px;
+  font-weight: 600;
+  color: #ff0000;
+  text-align: center;
+}
+
+.transportItemOnTime {
+  font-family: "IBM Plex Sans";
+  font-size: 14px;
+  font-weight: 600;
+  color: #00ad09;
+  text-align: center;
+}
+
+.transportItemRight {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 80px;
 }
 
 .flexContainer {
   display: flex;
   justify-content: space-between;
-}
-
-.transportItemTime {
-  margin: 0 2rem 0.5rem;
-  color: #909090;
-  font-family: "IBM Plex Mono";
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 24px;
-}
-
-.transportItemName {
-  margin: 0 1rem 0.5rem;
-  color: #222222;
-  font-family: "IBM Plex Sans";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
 }
 
 .alertColor {
@@ -114,6 +152,13 @@ body {
 
 .alertColorDelayed {
   background-color: #ff0000;
+}
+
+.transportItemTime {
+  font-family: "IBM Plex Sans";
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
 }
 
 .loading {
